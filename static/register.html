@@ -1,0 +1,49 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Register - IBM-FE-Login Demo</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head><body>
+<img src="/assets/ibm_logo.png" alt="IBM" class="logo">
+<button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+<main class="container">
+  <div class="card">
+    <h1>Create account</h1>
+    <form id="registerForm">
+      <label>Email
+        <input id="rEmail" type="email" placeholder="you@company.com" required />
+      </label>
+      <label>Password
+        <input id="rPassword" type="password" placeholder="min 8 chars" minlength="8" required />
+      </label>
+      <button type="submit">Register</button>
+    </form>
+    <p class="muted"><a href="/">Back to login</a></p>
+    <pre id="rLog" class="log"></pre>
+  </div>
+</main>
+<script>
+document.getElementById('registerForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('rEmail').value;
+  const password = document.getElementById('rPassword').value;
+  const log = document.getElementById('rLog');
+  log.textContent = 'Creating account...';
+  try {
+    const res = await fetch('/api/register', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email,password})
+    });
+    const data = await res.json();
+    log.textContent = JSON.stringify(data,null,2);
+    if(res.ok) {
+      setTimeout(() => window.location = '/', 2000);
+    }
+  } catch(err) {
+    log.textContent = 'Error: ' + err.message;
+  }
+});
+</script>
+<script src="/static/theme.js"></script>
+</body></html>

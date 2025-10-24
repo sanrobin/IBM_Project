@@ -1,0 +1,43 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard - IBM-FE-Login Demo</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head><body>
+<img src="/assets/ibm_logo.png" alt="IBM" class="logo">
+<button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+<main class="container">
+  <div class="card">
+    <h1>Dashboard</h1>
+    <p id="welcome" class="muted"></p>
+    <div style="margin: 16px 0;">
+      <p><strong>Status:</strong> <span id="status">Authenticated</span></p>
+      <p><strong>Role:</strong> <span id="role"></span></p>
+    </div>
+    <button id="logout">Logout</button>
+    <pre id="dLog" class="log"></pre>
+  </div>
+</main>
+<script>
+async function loadDashboard(){
+  const token = localStorage.getItem('ibm_token');
+  if(!token){ window.location = '/'; return; }
+  const res = await fetch('/api/dashboard', { headers: { 'Authorization': 'Bearer ' + token }});
+  const data = await res.json();
+  document.getElementById('dLog').textContent = JSON.stringify(data,null,2);
+  if(res.ok){ 
+    document.getElementById('welcome').textContent = data.message;
+    document.getElementById('role').textContent = data.role || 'user';
+  } else { 
+    localStorage.removeItem('ibm_token'); 
+    window.location = '/'; 
+  }
+}
+document.getElementById('logout').addEventListener('click', ()=>{
+  localStorage.removeItem('ibm_token'); window.location = '/';
+});
+loadDashboard();
+</script>
+<script src="/static/theme.js"></script>
+</body></html>

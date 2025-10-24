@@ -1,0 +1,53 @@
+<!doctype html>
+<html><head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MFA - IBM-FE-Login Demo</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head><body>
+<img src="/assets/ibm_logo.png" alt="IBM" class="logo">
+<button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+<main class="container">
+  <div class="card">
+    <h1>Enter OTP</h1>
+    <p class="muted">Check the demo response for the OTP (real apps send via email/SMS).</p>
+    <form id="otpForm">
+      <label>Email
+        <input id="oEmail" type="email" placeholder="you@company.com" required />
+      </label>
+      <label>OTP
+        <input id="oOtp" type="text" placeholder="123456" required />
+      </label>
+      <button type="submit">Verify</button>
+    </form>
+    <p class="muted"><a href="/">Back to login</a></p>
+    <pre id="otpLog" class="log"></pre>
+  </div>
+</main>
+<script>
+// Auto-populate from demo data
+const demoEmail = localStorage.getItem('demo_email');
+const demoOtp = localStorage.getItem('demo_otp_preview');
+if(demoEmail) document.getElementById('oEmail').value = demoEmail;
+if(demoOtp) document.getElementById('oOtp').value = demoOtp;
+
+document.getElementById('otpForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const email = document.getElementById('oEmail').value;
+  const otp = document.getElementById('oOtp').value;
+  const res = await fetch('/api/verify-otp',{
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({email, otp})
+  });
+  const data = await res.json();
+  document.getElementById('otpLog').textContent = JSON.stringify(data,null,2);
+  if(res.ok && data.token){
+    localStorage.setItem('ibm_token', data.token);
+    localStorage.removeItem('demo_email');
+    localStorage.removeItem('demo_otp_preview');
+    window.location = '/dashboard';
+  }
+});
+</script>
+<script src="/static/theme.js"></script>
+</body></html>

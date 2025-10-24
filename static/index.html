@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>IBM-FE-Login - Demo</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <img src="/assets/ibm_logo.png" alt="IBM" class="logo">
+  <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+  <main class="container">
+    <div class="card">
+      <h1>IBM-FE-Login (Demo)</h1>
+      <p class="muted">Secure demo login with MFA (OTP).</p>
+
+      <form id="loginForm">
+        <label>Email
+          <input id="email" type="email" placeholder="you@company.com" required />
+        </label>
+
+        <label>Password
+          <input id="password" type="password" placeholder="password" required />
+        </label>
+
+        <button type="submit">Login</button>
+      </form>
+
+      <p class="muted">No account? <a href="/register">Register</a></p>
+      
+      <div class="log" style="margin-top: 16px; font-size: 12px;">
+        <strong>Demo Credentials:</strong><br>
+        Email: admin@ibm.com<br>
+        Password: password123
+      </div>
+
+      <pre id="log" class="log"></pre>
+    </div>
+  </main>
+  <script src="/static/app.js"></script>
+  <script src="/static/theme.js"></script>
+</body>
+</html>
